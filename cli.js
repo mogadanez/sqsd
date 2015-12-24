@@ -24,6 +24,7 @@ program.version(pkg.version)
     .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.', 10)
     .option('-d, --daemonized', 'Whether to continue running with empty queue', false )
     .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', 0 )
+    .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms', 60000 )
     .option('--wait-time [value]', 'Long polling wait time when querying the queue.', 20 )
     .option('--content-type [value]', 'Long polling wait time when querying the queue.', 'application/json' )
     .option('--concurrency [value]', 'Long polling wait time when querying the queue.',  3  )
@@ -45,6 +46,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , userAgent: process.env.SQSD_WORKER_USER_AGENT
     , contentType: process.env.SQSD_WORKER_HTTP_REQUEST_CONTENT_TYPE
     , concurrency: process.env.SQSD_WORKER_CONCURRENCY
+    , timeout: process.env.SQSD_WORKER_TIMEOUT
 }
 
 
