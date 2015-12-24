@@ -1,0 +1,19 @@
+
+
+# Untracked projects
+.idea/
+src.iws
+.idea/workspace.xml
+*.user
+node_modules/
+
+#logs
+*.log
+*.log.txt
+
+# temporary
+*.map
+.DS_Store
+.directory
+*.pyc
+*.orig

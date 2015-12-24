@@ -1,0 +1,46 @@
+{
+  "name": "sqsd",
+  "description": "A simple alternative to the Amazon SQS Daemon (sqsd) used on AWS Beanstalk worker tier instances.",
+  "version": "1.0",
+  "engine": "node ~4.0.0",
+  "author": {
+    "name": "Proofme Inc.",
+    "url": "http://proofme.com/"
+  },
+  "homepage": "https://github.com/proofme/sqsd",
+  "contributors": [
+    {
+      "name": "Aleksandr Popov",
+      "email": "mogadanez@gmail.com"
+    }
+  ],
+  "scripts": {
+    "start": "./run-cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/proofme/sqsd.git"
+  },
+  "bin": {
+    "sqsd": "./run-cli.js"
+  },
+  "license": "MIT",
+  "keywords": [
+    "queue",
+    "amazon",
+    "sqs",
+    "sqsd",
+    "worker",
+    "webhook",
+    "post"
+  ],
+  "dependencies": {
+    "aws-sdk": "^2.2.26",
+    "bluebird": "^2.9.30",
+    "bunyan": "^1.5.1",
+    "commander": "^2.8.1",
+    "forever-monitor": "^1.5.2",
+    "http-request": "^0.7.0",
+    "lodash": "^3.9.3"
+  }
+}
