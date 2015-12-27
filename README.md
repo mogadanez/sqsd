@@ -41,15 +41,15 @@ Environment Variables and defaults are loaded from `config/sqsd-default-config.g
 | `AWS_ACCESS_KEY_ID`                     | -                  | no                                 | Your AWS Access Key.                                                                          |
 | `AWS_SECRET_ACCESS_KEY`                 | -                  | no                                 | Your AWS secret access secret.                                                                |
 | `SQS_QUEUE_REGION_NAME`                 | `us-east-1`        | no                                 | The region name of the AWS SQS queue                                                          |
-| `SQSD_QUEUE_URL`                        | -                  | if `SQSD_QUEUE_NAME` not specified | Your queue URL. You can instead use the queue name but this takes precedence over queue name. |
-| `SQSD_QUEUE_NAME`                       | -                  | if `SQSD_QUEUE_URL` not specified  | Your queue name.                                                                              |
+| `SQSD_QUEUE_URL`                        | -                  | yes                                | Your queue URL.                                                                               |
 | `SQSD_MAX_MESSAGES_PER_REQUEST`         | `10` (max: `10`)   | no                                 | Max number of messages to retrieve per request.                                               |
-| `SQSD_RUN_DAEMONIZED`                   | `0`                | no                                 | Whether to continue running with empty queue (0 is no, 1 is yes)
-| `SQSD_SLEEP_SECONDS`                    | `0`                | no                                 | Number of seconds to wait after polling empty queue when daemonized
+| `SQSD_RUN_DAEMONIZED`                   | `true`             | no                                 | Whether to continue running with empty queue (0 is no, 1 is yes)                              |
+| `SQSD_SLEEP_SECONDS`                    | `0`                | no                                 | Number of seconds to wait after polling empty queue when daemonized                           |
 | `SQSD_WAIT_TIME_SECONDS`                | `20` (max: `20`)   | no                                 | Long polling wait time when querying the queue.                                               |
-| `SQSD_WORKER_HTTP_URL`                  | -                  | yes                                | Web urk address to your service.                                                                 |
+| `SQSD_WORKER_HTTP_URL`                  | -                  | yes                                | Web urk address to your service.                                                              |
 | `SQSD_WORKER_HTTP_REQUEST_CONTENT_TYPE` | `application/json` | no                                 | Message MIME Type.                                                                            |
-| `SQSD_WORKER_CONCURRENCY`               | 3                  | no                                 | Number of concurrent http request to worker service                                                                          |
+| `SQSD_WORKER_CONCURRENCY`               | 3                  | no                                 | Number of concurrent http request to worker service                                           |
+| `SQSD_WORKER_TIMEOUT`                   | 60000              | no                                 | Timeout for waiting response from worker, ms                                                  |
 
 ### Running / Executing  
 
@@ -62,7 +62,7 @@ Use this run configuration when your worker is running in another container or i
     docker build -t someImageName .
     docker run -e -e SQSD_WORKER_HTTP_URL=http://someRemoteHost/someRemotePath someImageName
 
-**Remember that if you are running your worker on your Docker host's instance, you cannot use `localhost` as the worker host path since the `localhost` in this case will be the container's address, not your host's.*
+**Remember that if you are running your worker on your Docker host's instance, you cannot use `localhost` as the worker host path since the `localhost` in this case will be the container's address, not your host's. Use linked containers instead
 
-## Versions
- - 1.0 (current)
+
+
