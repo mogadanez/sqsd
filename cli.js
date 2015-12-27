@@ -18,13 +18,13 @@ program.version(pkg.version)
     .option('-q, --queue-url [value]', 'Your queue URL. Required')
     .option('--access-key-id [value]', 'Your AWS Access Key. Leave empty if use IAM roles.')
     .option('--secret-access-key [value]', 'Your AWS Secret Access Key. Leave empty if use IAM roles.')
-    .option('-r, --region [value]', 'The region name of the AWS SQS queue', "us-east-1")
-    .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.',parseInt, 10)
-    .option('-d, --daemonized', 'Whether to continue running with empty queue', false )
-    .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', parseInt, 0 )
-    .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms', parseInt, 60000 )
-    .option('--wait-time [value]', 'Long polling wait time when querying the queue.', parseInt, 20 )
-    .option('--content-type [value]', 'Long polling wait time when querying the queue.', 'application/json' )
+    .option('-r, --region [value]', 'The region name of the AWS SQS queue')
+    .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.',parseInt )
+    .option('-d, --daemonized', 'Whether to continue running with empty queue'  )
+    .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', parseInt)
+    .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms' )
+    .option('--wait-time [value]', 'Long polling wait time when querying the queue.', parseInt)
+    .option('--content-type [value]', 'Long polling wait time when querying the queue.' )
     .option('--concurrency [value]', 'Long polling wait time when querying the queue.', parseInt,  3  )
     .option('--user-agent [value]', 'User agent',  "sqsd"  )
     .option('-v, --verbose', 'A value that can be increased', increaseVerbosity, 0)
@@ -32,6 +32,19 @@ program.version(pkg.version)
 
 process.argv[1] = 'sqsd';
 program.parse(process.argv);
+
+var defaults = {
+     region: "us-east-1"
+    , maxMessages: 10
+    , daemonized: true
+    , sleep: 0
+    , waitTime: 20
+    , userAgent: "sqsd"
+    , contentType: 'application/json'
+    , concurrency: 3
+    , timeout: 60000
+    , verbose: 0
+}
 
 var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -50,7 +63,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
 }
 
 
-var mergedParams = _.defaults( _.pick ( program, _.keys(envParams) ), envParams );
+var mergedParams = _.defaults( _.pick ( program, _.keys(envParams) ), envParams, defaults );
 
 if ( ( !mergedParams.queueUrl) || !mergedParams.webHook ) {
 
