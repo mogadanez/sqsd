@@ -23,6 +23,8 @@ program.version(pkg.version)
     .option('-d, --daemonized ', 'Whether to continue running with empty queue'  )
     .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', parseInt)
     .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms' )
+    .option('--worker-health-url [value]', 'Url for checking that worker is running, useful when running in linked containers and worker needs some time to  up' )
+    .option('--worker-health-wait-time [value]', 'Timeout for waiting while worker become  health, ms' )
     .option('--wait-time [value]', 'Long polling wait time when querying the queue.', parseInt)
     .option('--content-type [value]', 'Long polling wait time when querying the queue.' )
     .option('--concurrency [value]', 'Long polling wait time when querying the queue.', parseInt,  3  )
@@ -43,6 +45,7 @@ var defaults = {
     , contentType: 'application/json'
     , concurrency: 3
     , timeout: 60000
+    , workerHealthWaitTime: 10000
     , verbose: 0
 }
 
@@ -59,6 +62,8 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , contentType: process.env.SQSD_WORKER_HTTP_REQUEST_CONTENT_TYPE
     , concurrency: process.env.SQSD_WORKER_CONCURRENCY
     , timeout: process.env.SQSD_WORKER_TIMEOUT
+    , workerHealthUrl: process.env.SQSD_WORKER_HEALTH_URL
+    , workerHealthWaitTime: process.env.SQSD_WORKER_HEALTH_WAIT_TIME
     , verbose: 0
 }
 
