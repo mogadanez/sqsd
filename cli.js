@@ -48,7 +48,7 @@ var defaults = {
 
 var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    , region: process.env.SQS_QUEUE_REGION_NAME
+    , region: process.env.SQSD_QUEUE_REGION_NAME || process.env.AWS_DEFAULT_REGION
     , queueUrl: process.env.SQSD_QUEUE_URL
     , maxMessages: process.env.SQSD_MAX_MESSAGES_PER_REQUEST
     , daemonized: process.env.SQSD_RUN_DAEMONIZED
