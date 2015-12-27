@@ -43,7 +43,7 @@ Environment Variables and defaults are loaded from `config/sqsd-default-config.g
 | `SQSD_QUEUE_REGION_NAME` or `AWS_DEFAULT_REGION`| `us-east-1`        | no                                 | The region name of the AWS SQS queue                                                          |
 | `SQSD_QUEUE_URL`                        | -                  | yes                                | Your queue URL.                                                                               |
 | `SQSD_MAX_MESSAGES_PER_REQUEST`         | `10` (max: `10`)   | no                                 | Max number of messages to retrieve per request.                                               |
-| `SQSD_RUN_DAEMONIZED`                   | `true`             | no                                 | Whether to continue running with empty queue (0 is no, 1 is yes)                              |
+| `SQSD_RUN_DAEMONIZED`                   | `0`                | no                                 | Whether to continue running with empty queue (0,no,false is no, 1,yes,true is yes)                              |
 | `SQSD_SLEEP_SECONDS`                    | `0`                | no                                 | Number of seconds to wait after polling empty queue when daemonized                           |
 | `SQSD_WAIT_TIME_SECONDS`                | `20` (max: `20`)   | no                                 | Long polling wait time when querying the queue.                                               |
 | `SQSD_WORKER_HTTP_URL`                  | -                  | yes                                | Web urk address to your service.                                                              |

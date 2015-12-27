@@ -20,7 +20,7 @@ program.version(pkg.version)
     .option('--secret-access-key [value]', 'Your AWS Secret Access Key. Leave empty if use IAM roles.')
     .option('-r, --region [value]', 'The region name of the AWS SQS queue')
     .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.',parseInt )
-    .option('-d, --daemonized', 'Whether to continue running with empty queue'  )
+    .option('-d, --daemonized ', 'Whether to continue running with empty queue'  )
     .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', parseInt)
     .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms' )
     .option('--wait-time [value]', 'Long polling wait time when querying the queue.', parseInt)
@@ -36,7 +36,7 @@ program.parse(process.argv);
 var defaults = {
      region: "us-east-1"
     , maxMessages: 10
-    , daemonized: true
+    , daemonized: false
     , sleep: 0
     , waitTime: 20
     , userAgent: "sqsd"
@@ -51,7 +51,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , region: process.env.SQSD_QUEUE_REGION_NAME || process.env.AWS_DEFAULT_REGION
     , queueUrl: process.env.SQSD_QUEUE_URL
     , maxMessages: process.env.SQSD_MAX_MESSAGES_PER_REQUEST
-    , daemonized: process.env.SQSD_RUN_DAEMONIZED
+    , daemonized:  (process.env.SQSD_RUN_DAEMONIZED || "") in { "1":1, "yes":1, "true":1 }
     , sleep: process.env.SQSD_SLEEP_SECONDS
     , waitTime: process.env.SQSD_WAIT_TIME_SECONDS
     , webHook: process.env.SQSD_WORKER_HTTP_URL
@@ -61,6 +61,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , timeout: process.env.SQSD_WORKER_TIMEOUT
     , verbose: 0
 }
+
 
 
 var mergedParams = _.defaults( _.pick ( program, _.keys(envParams) ), envParams, defaults );
@@ -75,6 +76,9 @@ if ( ( !mergedParams.queueUrl) || !mergedParams.webHook ) {
 logger.init( mergedParams.verbose );
 logger.info('SQSD v' + pkg.version);
 new sqsd(mergedParams).start()
+    .then(()=>{
+        process.exit(0);
+    })
     .catch( err=> {
         logger.error( {err:err}, "Unexpected error")
         process.exit(1);
