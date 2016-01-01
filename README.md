@@ -1,8 +1,7 @@
 
 # SQSD 
 
-A simple alternative to the Amazon SQS Daemon ("sqsd") used on AWS Beanstalk worker tier instances.
-inspired from https://github.com/mozart-analytics/sqsd, rewriten to node.js 
+A simple alternative to the Amazon SQS Daemon ("sqsd") used on AWS Beanstalk worker tier instances. Inspired by https://github.com/mozart-analytics/sqsd, rewriten for Node.js.
 
 
 [AWS Beanstalk](http://aws.amazon.com/elasticbeanstalk/) provides a simple to use *Worker Environment Tier* 
