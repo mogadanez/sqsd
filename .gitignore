@@ -1,11 +1,11 @@
 
-
 # Untracked projects
 .idea/
 src.iws
 .idea/workspace.xml
 *.user
 node_modules/
+.env
 
 #logs
 *.log

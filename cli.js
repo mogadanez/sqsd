@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
+var dotenv = require('dotenv');
 var logger = require('./lib/logger');
 var sqsd = require('./lib/index').SQSProcessor;
 var program = require('commander');
 var _ = require('lodash');
+var path = require('path');
 
 
 
@@ -29,6 +31,7 @@ program.version(pkg.version)
     .option('--content-type [value]', 'Long polling wait time when querying the queue.' )
     .option('--concurrency [value]', 'Long polling wait time when querying the queue.', parseInt,  3  )
     .option('--user-agent [value]', 'User agent',  "sqsd"  )
+    .option('--env [value]', 'Path to .env file to load environment variables from. Optional', '.env')
     .option('-v, --verbose', 'A value that can be increased', increaseVerbosity, 0)
 
 
@@ -49,6 +52,11 @@ var defaults = {
     , verbose: 0
 }
 
+dotenv.config({
+    silent: true,
+    path: path.resolve(__dirname, program.env)
+});
+
 var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     , region: process.env.SQSD_QUEUE_REGION_NAME || process.env.AWS_DEFAULT_REGION
@@ -67,16 +75,15 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , verbose: 0
 }
 
-
-
-var mergedParams = _.defaults( _.pick ( program, _.keys(envParams) ), envParams, defaults );
+var extractedCliArgs = _.pick(program, _.keys(envParams));
+var mergedParams = _.defaults(extractedCliArgs, envParams, defaults);
 
 if ( ( !mergedParams.queueUrl) || !mergedParams.webHook ) {
-
-    console.log ( "--web-hook  and --queue-url  is required", mergedParams.verbose )
+    console.log ( "--web-hook  and --queue-url  is required", mergedParams.verbose)
     //program.outputHelp();
     process.exit(1);
 }
+
 
 logger.init( mergedParams.verbose );
 logger.info('SQSD v' + pkg.version);
