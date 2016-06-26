@@ -15,7 +15,7 @@
     }
   ],
   "scripts": {
-    "start": "./run-cli.js"
+    "start": "node run-cli.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "bluebird": "^2.9.30",
     "bunyan": "^1.5.1",
     "commander": "^2.8.1",
+    "dotenv": "^2.0.0",
     "forever-monitor": "^1.5.2",
     "lodash": "^3.9.3",
     "request": "^2.67.0"
