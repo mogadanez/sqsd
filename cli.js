@@ -79,7 +79,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , endpointUrl: process.env.SQSD_ENDPOINT_URL
     , queueName: process.env.SQSD_QUEUE_NAME
     , sslEnabled: process.env.SQSD_SSL_ENABLED
-    , verbose: 0
+    , verbose: process.env.VERBOSE
 }
 
 var extractedCliArgs = _.pick(program, _.keys(envParams));
