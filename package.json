@@ -35,7 +35,7 @@
     "post"
   ],
   "dependencies": {
-    "aws-sdk": "^2.2.26",
+    "aws-sdk": "^2.6.12",
     "bluebird": "^2.9.30",
     "bunyan": "^1.5.1",
     "commander": "^2.8.1",

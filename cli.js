@@ -17,9 +17,11 @@ var pkg = require('./package.json');
 
 program.version(pkg.version)
     .option('-w, --web-hook [value]', 'The webhook url to which messages from queue be posted. Required' )
-    .option('-q, --queue-url [value]', 'Your queue URL. Required')
+    .option('-q, --queue-url [value]', 'Your queue URL.')
+    .option('--queue-name [value]', 'The name of the queue. Fetched from queue URL if empty')
     .option('--access-key-id [value]', 'Your AWS Access Key. Leave empty if use IAM roles.')
     .option('--secret-access-key [value]', 'Your AWS Secret Access Key. Leave empty if use IAM roles.')
+    .option('--endpoint-url [value]', 'Your endpoint Url if your using a fake service. Leave empty if using Amazon sqs.')
     .option('-r, --region [value]', 'The region name of the AWS SQS queue')
     .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.',parseInt )
     .option('-d, --daemonized ', 'Whether to continue running with empty queue'  )
@@ -32,6 +34,7 @@ program.version(pkg.version)
     .option('--concurrency [value]', 'Long polling wait time when querying the queue.', parseInt,  3  )
     .option('--user-agent [value]', 'User agent',  "sqsd"  )
     .option('--env [value]', 'Path to .env file to load environment variables from. Optional', '.env')
+    .option('--ssl-enabled [value]', 'To enable ssl or not. Default is true')
     .option('-v, --verbose', 'A value that can be increased', increaseVerbosity, 0)
 
 
@@ -49,6 +52,7 @@ var defaults = {
     , concurrency: 3
     , timeout: 60000
     , workerHealthWaitTime: 10000
+    , sslEnabled: true
     , verbose: 0
 }
 
@@ -72,14 +76,17 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , timeout: process.env.SQSD_WORKER_TIMEOUT
     , workerHealthUrl: process.env.SQSD_WORKER_HEALTH_URL
     , workerHealthWaitTime: process.env.SQSD_WORKER_HEALTH_WAIT_TIME
-    , verbose: 0
+    , endpointUrl: process.env.SQSD_ENDPOINT_URL
+    , queueName: process.env.SQSD_QUEUE_NAME
+    , sslEnabled: process.env.SQSD_SSL_ENABLED
+    , verbose: process.env.VERBOSE
 }
 
 var extractedCliArgs = _.pick(program, _.keys(envParams));
 var mergedParams = _.defaults(extractedCliArgs, envParams, defaults);
 
-if ( ( !mergedParams.queueUrl) || !mergedParams.webHook ) {
-    console.log ( "--web-hook  and --queue-url  is required", mergedParams.verbose)
+if (!mergedParams.webHook) {
+    console.log ( "--web-hook is required", mergedParams.verbose)
     //program.outputHelp();
     process.exit(1);
 }

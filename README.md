@@ -83,7 +83,10 @@ Run the program with the `--help` flag to see the full list of accepted argument
 |  --access-key-id | `AWS_ACCESS_KEY_ID`                              | -                  | no           | Your AWS Access Key.                                                                                                 |
 | --secret-access-key  | `AWS_SECRET_ACCESS_KEY`                          | -                  | no           | Your AWS secret access secret.                                                                                       |
 |  -r, --region | `SQSD_QUEUE_REGION_NAME` or `AWS_DEFAULT_REGION` | `us-east-1`        | no           | The region name of the AWS SQS queue                                                                                 |
-| -q, --queue-url  | `SQSD_QUEUE_URL`                                 | -                  | yes          | Your queue URL.                                                                                                      |
+| -q, --queue-url  | `SQSD_QUEUE_URL`                                 | -                  | no          | Your queue URL.                                                                                                      |
+| --queue-name  | `SQSD_QUEUE_NAME`                                 | -                  | no          | The name of the queue. Fetch from queue URL if blank                                                                                                      |
+| --endpoint-url  | `SQSD_ENDPOINT_URL`                                 | -                  | no          | Your endpoint URL if you using a fake sqs.                                                                                                      |
+| --ssl-enabled  | `SQSD_SSL_ENABLED`                                 | `true`                  | no          | To enable ssl or not.                                                                                                      |
 |  -m, --max-messages | `SQSD_MAX_MESSAGES_PER_REQUEST`                  | `10` (max: `10`)   | no           | Max number of messages to retrieve per request.                                                                      |
 |  -d, --daemonized | `SQSD_RUN_DAEMONIZED`                            | `0`                | no           | Whether to continue running with empty queue (0,no,false is no, 1,yes,true is yes)                                   |
 |  -s, --sleep | `SQSD_SLEEP_SECONDS`                             | `0`                | no           | Number of seconds to wait after polling empty queue when daemonized                                                  |
@@ -103,7 +106,21 @@ Use this run configuration when your worker is running in another container or i
     docker build -t someImageName .
     docker run -e -e SQSD_WORKER_HTTP_URL=http://someRemoteHost/someRemotePath someImageName
 
-**Remember that if you are running your worker on your Docker host's instance, you cannot use `localhost` as the worker host path since the `localhost` in this case will be the container's address, not your host's. Use linked containers instead
+**Remember that if you are running your worker on your Docker host's instance, you cannot use `localhost` as the worker host path since the `localhost` in this case will be the container's address, not your host's. Use linked containers instead**
 
+#### Running with fake_sqs
 
+You may want to run fake_sqs for local development. To do this gem install fake_sqs and run it with command:
+`fake_sqs`
 
+You will then need to configure sqsd to communicate with the fake sqs server.
+Here is a sample .env file below.
+
+SQSD_QUEUE_NAME=queue_name
+SQSD_WORKER_HTTP_URL=http://127.0.0.1
+SQSD_ENDPOINT_URL=http://127.0.0.1:4568
+SQSD_SSL_ENABLED=false
+AWS_ACCESS_KEY_ID=meh
+AWS_SECRET_ACCESS_KEY=meh
+
+The access key and the secret key must not be blank.
