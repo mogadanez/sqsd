@@ -1,7 +1,7 @@
 {
   "name": "sqsd",
   "description": "A simple alternative to the Amazon SQS Daemon (sqsd) used on AWS Beanstalk worker tier instances.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "engine": "node ~4.0.0",
   "author": {
     "name": "Proofme Inc.",
