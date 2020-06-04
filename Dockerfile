@@ -1,4 +1,4 @@
-FROM node:4
+FROM node:12
 
 MAINTAINER Aleksandr Popov  <mogadanez@gmail.com>
 
