@@ -2,10 +2,7 @@
 'use strict';
 
 var forever = require('forever-monitor');
-var logger = require('./lib/logger');
 var path = require('path');
-
-var pkg = require('./package.json');
 
 var restartCount = 0;
 var sqsdProcess = new (forever.Monitor)(path.join(__dirname, 'cli.js'), {

@@ -36,12 +36,11 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.6.12",
-    "bluebird": "^2.9.30",
-    "bunyan": "^1.5.1",
-    "commander": "^2.8.1",
-    "dotenv": "^2.0.0",
-    "forever-monitor": "^1.5.2",
-    "lodash": "^3.9.3",
-    "request": "^2.67.0"
+    "axios": "^0.19.2",
+    "commander": "^5.1.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "forever-monitor": "^3.0.0",
+    "lodash": "^4.17.15"
   }
 }

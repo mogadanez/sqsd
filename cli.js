@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 'use strict';
+const path = require('path');
+const program = require('commander');
+const _ = require('lodash');
 
-var dotenv = require('dotenv');
-var logger = require('./lib/logger');
-var sqsd = require('./lib/index').SQSProcessor;
-var program = require('commander');
-var _ = require('lodash');
-var path = require('path');
 
 
 
@@ -56,6 +53,7 @@ var defaults = {
     , verbose: 0
 }
 
+const dotenv = require('dotenv');
 dotenv.config({
     silent: true,
     path: path.resolve(__dirname, program.env)
@@ -79,26 +77,28 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , endpointUrl: process.env.SQSD_ENDPOINT_URL
     , queueName: process.env.SQSD_QUEUE_NAME
     , sslEnabled: process.env.SQSD_SSL_ENABLED
-    , verbose: process.env.VERBOSE
 }
 
-var extractedCliArgs = _.pick(program, _.keys(envParams));
+var extractedCliArgs = _.pick(program, Object.keys(envParams));
 var mergedParams = _.defaults(extractedCliArgs, envParams, defaults);
 
 if (!mergedParams.webHook) {
-    console.log ( "--web-hook is required", mergedParams.verbose)
+    console.log ( "--web-hook is required")
     //program.outputHelp();
     process.exit(1);
 }
 
 
-logger.init( mergedParams.verbose );
-logger.info('SQSD v' + pkg.version);
+const debug = require('debug')("sqsd");
+const error = require('debug')('sqsd:error');
+const sqsd = require('./lib/index').SQSProcessor;
+
+console.log('SQSD v' + pkg.version);
 new sqsd(mergedParams).start()
     .then(()=>{
         process.exit(0);
     })
     .catch( err=> {
-        logger.error( {err:err}, "Unexpected error")
+        console.error( err )
         process.exit(1);
     })
