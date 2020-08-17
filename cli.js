@@ -61,6 +61,7 @@ dotenv.config({
 
 var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    , sessionToken: process.env.AWS_SESSION_TOKEN
     , region: process.env.SQSD_QUEUE_REGION_NAME || process.env.AWS_DEFAULT_REGION
     , queueUrl: process.env.SQSD_QUEUE_URL
     , maxMessages: process.env.SQSD_MAX_MESSAGES_PER_REQUEST
