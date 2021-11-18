@@ -80,7 +80,15 @@ if ( ( !mergedParams.queueUrl) || !mergedParams.webHook ) {
 
 logger.init( mergedParams.verbose );
 logger.info('SQSD v' + pkg.version);
-new sqsd(mergedParams).start()
+const daemon = new sqsd(mergedParams);
+
+process.on('message', function (message) {
+    if (message.action == 'shutdown') {
+        daemon.shutdown = true;
+    }
+});
+
+daemon.start()
     .then(()=>{
         process.exit(0);
     })

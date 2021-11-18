@@ -9,6 +9,7 @@ var pkg = require('./package.json');
 
 var restartCount = 0;
 var sqsdProcess = new (forever.Monitor)(path.join(__dirname, 'cli.js'), {
+    fork: true,
     max: 1000,
     minUptime: 22000,
     args: process.argv.slice(2)
@@ -32,3 +33,9 @@ sqsdProcess.on('exit', function () {
 });
 
 sqsdProcess.start();
+
+process.on('SIGUSR1', () => {
+  console.info('SIGUSR1 signal received, graceful shutdown sqsd');
+  sqsdProcess.forceStop = true;
+  sqsdProcess.send({action: 'shutdown'});
+});
