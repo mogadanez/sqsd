@@ -95,7 +95,15 @@ const error = require('debug')('sqsd:error');
 const sqsd = require('./lib/index').SQSProcessor;
 
 console.log('SQSD v' + pkg.version);
-new sqsd(mergedParams).start()
+const daemon = new sqsd(mergedParams);
+
+process.on('message', function (message) {
+    if (message.action == 'shutdown') {
+        daemon.shutdown = true;
+    }
+});
+
+daemon.start()
     .then(()=>{
         process.exit(0);
     })
