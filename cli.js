@@ -21,6 +21,7 @@ program.version(pkg.version)
     .option('--endpoint-url [value]', 'Your endpoint Url if your using a fake service. Leave empty if using Amazon sqs.')
     .option('-r, --region [value]', 'The region name of the AWS SQS queue')
     .option('-m, --max-messages [value]', 'Max number of messages to retrieve per request.',parseInt )
+    .option('--max-errors [value]', 'Max number of error before shutdown.',parseInt )
     .option('-d, --daemonized ', 'Whether to continue running with empty queue'  )
     .option('-s, --sleep [value]', 'Number of seconds to wait after polling empty queue when daemonized', parseInt)
     .option('-t, --timeout [value]', 'Timeout for waiting response from worker, ms' )
@@ -54,10 +55,11 @@ var defaults = {
 }
 
 const dotenv = require('dotenv');
-dotenv.config({
-    silent: true,
-    path: path.resolve(__dirname, program.env)
-});
+if (program.env)
+    dotenv.config({
+        silent: true,
+        path: path.resolve(__dirname, program.env)
+    });
 
 var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -65,6 +67,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , region: process.env.SQSD_QUEUE_REGION_NAME || process.env.AWS_DEFAULT_REGION
     , queueUrl: process.env.SQSD_QUEUE_URL
     , maxMessages: process.env.SQSD_MAX_MESSAGES_PER_REQUEST
+    , maxErrors: process.env.SQSD_MAX_ERRORS_BOFORE_SHUTDOWN
     , daemonized:  (process.env.SQSD_RUN_DAEMONIZED || "") in { "1":1, "yes":1, "true":1 }
     , sleep: process.env.SQSD_SLEEP_SECONDS
     , waitTime: process.env.SQSD_WAIT_TIME_SECONDS
@@ -80,7 +83,7 @@ var envParams = { accessKeyId: process.env.AWS_ACCESS_KEY_ID
     , sslEnabled: process.env.SQSD_SSL_ENABLED
 }
 
-var extractedCliArgs = _.pick(program, Object.keys(envParams));
+var extractedCliArgs = _.pick(program.opts(), Object.keys(envParams));
 var mergedParams = _.defaults(extractedCliArgs, envParams, defaults);
 
 if (!mergedParams.webHook) {

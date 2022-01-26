@@ -1,7 +1,4 @@
-FROM node:12
-
-MAINTAINER Aleksandr Popov  <mogadanez@gmail.com>
-
+FROM node:14-slim
 # Create sqsd directory
 WORKDIR /
 RUN mkdir /sqsd
