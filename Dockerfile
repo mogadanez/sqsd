@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:17-alpine
 
 MAINTAINER Aleksandr Popov  <mogadanez@gmail.com>
 
@@ -15,4 +15,3 @@ RUN npm install
 
 # Run sqsd
 CMD ["node", "run-cli.js"]
-
