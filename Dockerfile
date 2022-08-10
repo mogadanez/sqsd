@@ -1,7 +1,5 @@
 FROM node:17-alpine
 
-MAINTAINER Aleksandr Popov  <mogadanez@gmail.com>
-
 # Create sqsd directory
 WORKDIR /
 RUN mkdir /sqsd
